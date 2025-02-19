@@ -19,6 +19,7 @@
   "homepage": "https://github.com/agriyantosk/instagram-post-scraper#readme",
   "dependencies": {
     "apify-client": "^2.12.0",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "googleapis": "^144.0.0"
   }
 }
