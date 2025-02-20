@@ -49,7 +49,34 @@ const client = new ApifyClient({
     const { items } = await client.dataset(run.defaultDatasetId).listItems();
 
     items.forEach((item) => {
-      const formattedDate = new Date(item.timestamp);
+      const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+
+        const options = {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        };
+        let formattedDate = date.toLocaleDateString("en-GB", options);
+
+        const day = date.getDate();
+        const suffix =
+          day % 10 === 1 && day !== 11
+            ? "st"
+            : day % 10 === 2 && day !== 12
+            ? "nd"
+            : day % 10 === 3 && day !== 13
+            ? "rd"
+            : "th";
+
+        formattedDate = formattedDate.replace(/\d+/, `${day}${suffix}`);
+
+        return formattedDate;
+      };
+
+      const formattedDate = formatDate(item.timestamp);
+      console.log(formattedDate);
 
       const detectedType = normalizeType(
         item.caption,
