@@ -1,7 +1,5 @@
 export const priceKeywords = ["harga", "price", "idr", "rp"];
-
 export const driverKeywords = ["driver", "drivers"];
-
 export const woodKeywords = [
   "wood",
   "fairway wood",
@@ -9,9 +7,7 @@ export const woodKeywords = [
   "fairwaywoods",
   "fairwaywood",
 ];
-
 export const hybridKeywords = ["rescue", "hybrid"];
-
 export const ironsKeywords = [
   "irons",
   "iron",
@@ -20,7 +16,6 @@ export const ironsKeywords = [
   "ironsets",
   "iron sets",
 ];
-
 export const clubModels = {
   Taylormade: [
     "Qi10",
@@ -113,3 +108,19 @@ export const clubModels = {
     "King Forged Tec Copper",
   ],
 };
+export const usedKeywords = ["used", "bekas", "mint", "like new", "likenew"];
+export const newKeywords = [
+  "new",
+  "brandnew",
+  "brand new",
+  "baru",
+  "BNIB",
+  "BNIP",
+];
+export const soldKeywords = [
+  "sold",
+  "laku",
+  "purchased",
+  "sold out",
+  "soldout",
+];
