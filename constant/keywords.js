@@ -7,7 +7,7 @@ export const woodKeywords = [
   "fairwaywoods",
   "fairwaywood",
 ];
-export const hybridKeywords = ["rescue", "hybrid"];
+export const hybridKeywords = ["rescue", "hybrid, utility"];
 export const ironsKeywords = [
   "irons",
   "iron",
