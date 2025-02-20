@@ -29,11 +29,16 @@ const client = new ApifyClient({
   try {
     const results = [];
     const username = process.argv[2];
-    console.log(username);
-    if (!username || !usernames.includes(username.toLowerCase())) {
+    console.log("Inputed Username: ", username);
+    console.log("Checking inputs...");
+    if (
+      !username ||
+      !usernames.includes(username.toLowerCase()) ||
+      usernameLocations[username]
+    ) {
       throw new Error("Username must be valid!");
     }
-    console.log(usernameLocations[username]);
+    console.log("Inputs are valid!✅");
     console.log("Script is running...");
     const run = await client.actor(process.env.APIFY_ACTOR_ID).call({
       username: [username],
@@ -53,6 +58,8 @@ const client = new ApifyClient({
         ironsKeywords,
         woodKeywords
       );
+
+      if (detectedType === null) return;
       const extractedPrice = extractPrice(item.caption, priceKeywords);
       const condition = extractCondition(
         item.caption,
@@ -84,7 +91,7 @@ const client = new ApifyClient({
     await insertScrapedData(username, results);
 
     // TO TEST AND SEE THE OUTPUT
-    fs.writeFileSync("output.json", JSON.stringify(results, null, 2), "utf-8");
+    // fs.writeFileSync("output.json", JSON.stringify(results, null, 2), "utf-8");
   } catch (error) {
     console.error(error);
     process.exit(1);
