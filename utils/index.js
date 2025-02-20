@@ -1,3 +1,49 @@
+const extractIronSet = (caption) => {
+  const ironPattern = /\b(\d+)(?:-(\d+))?\b|[PWS]/g;
+  let matches = [...caption.matchAll(ironPattern)].map((match) =>
+    match[2] ? `${match[1]}-${match[2]}` : match[1] || match[0]
+  );
+
+  if (matches.length > 1) {
+    return `Ironset (${matches[0]}-${matches[matches.length - 1]})`;
+  }
+  return "UNKNOWN";
+};
+
+const extractHybrid = (caption) => {
+  const lowerCaption = caption.toLowerCase();
+
+  if (lowerCaption.includes("iron")) return null;
+
+  const hybridPattern =
+    /\b(?:hybrid|rescue|utility)?\s*(\d)\b|\b(\d)(?:hybrid|rescue|utility)\b/g;
+
+  let matches = [...lowerCaption.matchAll(hybridPattern)].map((match) =>
+    parseInt(match[1] || match[2])
+  );
+  let validHybrid = matches.find((num) => [2, 3, 4, 5].includes(num));
+
+  if (validHybrid) return `Hybrid ${validHybrid}`;
+  return "UNKNOWN";
+};
+
+const extractFW = (caption) => {
+  const lowerCaption = caption.toLowerCase();
+
+  if (!woodKeywords.some((word) => lowerCaption.includes(word))) return null;
+
+  const fwPattern = /\b(\d)?\s?(?:wood|fairway\s?wood)\s?(\d)?\b/g;
+
+  let matches = [...lowerCaption.matchAll(fwPattern)]
+    .flatMap((match) => [match[1], match[2]])
+    .filter(Boolean)
+    .map((num) => parseInt(num));
+  let validFW = matches.find((num) => num === 3 || num === 5);
+
+  if (validFW) return `FW ${validFW}`;
+  return "UNKNOWN";
+};
+
 export const normalizeType = (
   caption,
   driverKeywords,
@@ -6,15 +52,18 @@ export const normalizeType = (
   ironsKeywords
 ) => {
   const lowerCaption = caption.toLowerCase();
+
   if (driverKeywords.some((word) => lowerCaption.includes(word)))
     return "Driver";
-  if (woodKeywords.some((word) => lowerCaption.includes(word))) return "FW";
+  if (woodKeywords.some((word) => lowerCaption.includes(word)))
+    return extractFW(lowerCaption);
   if (hybridKeywords.some((word) => lowerCaption.includes(word)))
-    return "Hybrid";
-  if (ironsKeywords.some((word) => lowerCaption.includes(word))) return "Irons";
+    return extractHybrid(lowerCaption);
+  if (ironsKeywords.some((word) => lowerCaption.includes(word)))
+    return extractIronSet(lowerCaption);
+
   return "Unknown";
 };
-
 export const extractPrice = (caption, priceKeywords) => {
   const words = caption.split(/\s+/);
   let foundKeyword = false;
