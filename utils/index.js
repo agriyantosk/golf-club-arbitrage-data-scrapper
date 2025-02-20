@@ -29,3 +29,26 @@ export const extractPrice = (caption, priceKeywords) => {
   }
   return null;
 };
+
+export const extractCondition = (
+  caption,
+  usedKeywords,
+  newKeywords,
+  soldKeywords
+) => {
+  const lowerCaption = caption.toLowerCase();
+  const conditionPattern = /\b\d+(\.\d+)?\/\d+\b/;
+
+  if (soldKeywords.some((word) => lowerCaption.includes(word))) {
+    return "SOLD";
+  } else if (newKeywords.some((word) => lowerCaption.includes(word))) {
+    return "NEW";
+  } else if (
+    usedKeywords.some((word) => lowerCaption.includes(word)) ||
+    conditionPattern.test(lowerCaption)
+  ) {
+    return "USED";
+  } else {
+    return "UNKNOWN";
+  }
+};
