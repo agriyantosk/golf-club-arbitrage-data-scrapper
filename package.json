@@ -1,5 +1,6 @@
 {
   "name": "instagram-post-scraper",
+  "type": "module",
   "version": "1.0.0",
   "description": "This project was made focusing on arbitraging golf club",
   "main": "index.js",
@@ -11,7 +12,7 @@
     "url": "git+https://github.com/agriyantosk/instagram-post-scraper.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "agriyantosk",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/agriyantosk/instagram-post-scraper/issues"
