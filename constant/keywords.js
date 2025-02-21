@@ -124,3 +124,10 @@ export const soldKeywords = [
   "sold out",
   "soldout",
 ];
+
+export const filters = {
+  driver: "h010001",
+  fw: "h010002",
+  ironset: "h010004",
+  hybrid: "h010003",
+};
