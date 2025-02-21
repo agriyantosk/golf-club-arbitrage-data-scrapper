@@ -1,8 +1,12 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import iconv from "iconv-lite";
-import { filters } from "./constant/keywords";
-import { extractFw, extractHybrid, extractIronset } from "./utils/golfPartner";
+import { filters } from "../constant/keywords.js";
+import {
+  extractFw,
+  extractHybrid,
+  extractIronset,
+} from "../utils/golfPartner.js";
 
 const scrapeGolfClubDetails = async (url, type) => {
   try {
@@ -38,10 +42,8 @@ const scrapeGolfClubDetails = async (url, type) => {
   }
 };
 
-async function scrapeGolfClubs() {
+async function golfPartner(filter, keyword) {
   try {
-    const filter = process.argv[2];
-    const keyword = process.argv[3];
     if (!filters[filter]) throw new Error("Invalid Filter!");
     const listUrl = `https://www.golfpartner.jp/shop/usedgoods/${
       filters[filter]
@@ -113,9 +115,11 @@ async function scrapeGolfClubs() {
     }
 
     console.log(results);
+    console.log("Starting to insert scraped datas...");
+    // code to insert to google sheets
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
 
-scrapeGolfClubs();
+export default golfPartner;
