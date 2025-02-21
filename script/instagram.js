@@ -18,7 +18,7 @@ import {
   normalizeType,
 } from "../utils/instagram.js";
 import { date, usernameLocations, usernames } from "../constant/input.js";
-import { insertScrapedData } from "../utils/googlesheet.js";
+import { insertInstagramScrapedData } from "../utils/instagramGooglesheet.js";
 config();
 
 const client = new ApifyClient({
@@ -133,9 +133,9 @@ const instagram = async (username) => {
     });
 
     console.log("Results: ", results);
-
+    console.log(`Successsfully scraped ${results.length} data`);
     console.log("Starting to insert scraped datas...");
-    await insertScrapedData(username, results);
+    await insertInstagramScrapedData(username, results);
 
     // TO TEST AND SEE THE OUTPUT
     // fs.writeFileSync("output.json", JSON.stringify(results, null, 2), "utf-8");

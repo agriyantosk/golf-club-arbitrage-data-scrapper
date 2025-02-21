@@ -58,7 +58,7 @@ export const extractIronset = ($) => {
   if (!validFormats.has(formattedOutput.normalize("NFKC"))) {
     return false;
   }
-  return `Ironset ${formattedOutput.normalize("NFKC")}` || "UNKNWON";
+  return `Ironset (${formattedOutput.normalize("NFKC")})` || "UNKNWON";
 };
 
 export const extractHybrid = ($) => {

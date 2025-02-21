@@ -7,6 +7,8 @@ import {
   extractHybrid,
   extractIronset,
 } from "../utils/golfPartner.js";
+import { insertGolfPartnerScrapedData } from "../utils/golfParnterGooglesheets.js";
+import { translateText } from "../utils/utils.js";
 
 const scrapeGolfClubDetails = async (url, type) => {
   try {
@@ -50,7 +52,7 @@ async function golfPartner(filter, keyword) {
     }__spnocg/?search=x&keyword=${keyword.replaceAll(
       " ",
       "%20"
-    )}&limit=100&usedgoods_limit=100`;
+    )}&limit=100&usedgoods_limit=20`;
 
     const response = await axios.get(listUrl, {
       responseType: "arraybuffer",
@@ -74,6 +76,11 @@ async function golfPartner(filter, keyword) {
       const formatPrice = (price) =>
         parseInt(price.replace(/[^\d]/g, ""), 10) || 0;
 
+      const brand = $(element)
+        .find(".name2_ a")
+        .text()
+        .trim()
+        .replace(/\s+/g, " ");
       let product_name = cleanText(".name1_ a");
       let normalizedProductName = product_name.normalize("NFKC").toUpperCase();
       const normalizedKeyword = keyword.normalize("NFKC").toUpperCase();
@@ -105,18 +112,20 @@ async function golfPartner(filter, keyword) {
       const clubDetail = await scrapeGolfClubDetails(product_url, filter);
 
       results.push({
-        product_name: normalizedProductName,
-        price,
+        brand: await translateText(brand),
+        model: normalizedProductName,
         type: clubDetail,
+        price,
         condition: "USED",
-        image_url,
-        product_url,
+        link: product_url,
+        imgUrl: image_url,
       });
     }
 
     console.log(results);
+    console.log(`Successsfully scraped ${results.length} data`);
     console.log("Starting to insert scraped datas...");
-    // code to insert to google sheets
+    insertGolfPartnerScrapedData(results);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
