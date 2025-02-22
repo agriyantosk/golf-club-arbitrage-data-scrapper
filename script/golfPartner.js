@@ -23,14 +23,17 @@ const scrapeGolfClubDetails = async (url, type) => {
     let extractedData;
 
     switch (type) {
-      case "ironset":
-        extractedData = extractIronset($);
+      case "driver":
+        extractedData = "Driver";
+        break;
+      case "fw":
+        extractedData = extractFw($);
         break;
       case "hybrid":
         extractedData = extractHybrid($);
         break;
-      case "fw":
-        extractedData = extractFw($);
+      case "ironset":
+        extractedData = extractIronset($);
         break;
       default:
         extractedData = "UNKNOWN";
@@ -52,7 +55,9 @@ async function golfPartner(filter, keyword) {
     }__spnocg/?search=x&keyword=${keyword.replaceAll(
       " ",
       "%20"
-    )}&limit=100&usedgoods_limit=20`;
+    )}&limit=100&usedgoods_limit=50`;
+
+    console.log("Searched URL: ", listUrl);
 
     const response = await axios.get(listUrl, {
       responseType: "arraybuffer",
@@ -113,7 +118,7 @@ async function golfPartner(filter, keyword) {
 
       results.push({
         brand: await translateText(brand),
-        model: normalizedProductName,
+        model: keyword,
         type: clubDetail,
         price,
         condition: "USED",
