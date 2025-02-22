@@ -39,7 +39,7 @@ const scrapeGolfClubDetails = async (url, type) => {
         extractedData = "UNKNOWN";
         break;
     }
-
+    console.log(extractedData);
     return extractedData;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -50,12 +50,15 @@ const scrapeGolfClubDetails = async (url, type) => {
 async function golfPartner(filter, keyword) {
   try {
     if (!filters[filter]) throw new Error("Invalid Filter!");
+    const limit = ["20", "50", "100"];
+    let startingRow = 132;
+    let startingColumn = "C";
+
     const listUrl = `https://www.golfpartner.jp/shop/usedgoods/${
       filters[filter]
-    }__spnocg/?search=x&keyword=${keyword.replaceAll(
-      " ",
-      "%20"
-    )}&limit=100&usedgoods_limit=50`;
+    }__spnocg/?search=x&keyword=${keyword.replaceAll(" ", "%20")}&limit=${
+      limit[2]
+    }&usedgoods_limit=${limit[2]}`;
 
     console.log("Searched URL: ", listUrl);
 
@@ -118,7 +121,7 @@ async function golfPartner(filter, keyword) {
 
       results.push({
         brand: await translateText(brand),
-        model: keyword,
+        model: normalizedProductName,
         type: clubDetail,
         price,
         condition: "USED",
@@ -127,10 +130,10 @@ async function golfPartner(filter, keyword) {
       });
     }
 
-    console.log(results);
+    console.log("results: ", results);
     console.log(`Successsfully scraped ${results.length} data`);
     console.log("Starting to insert scraped datas...");
-    insertGolfPartnerScrapedData(results);
+    await insertGolfPartnerScrapedData(results, startingRow, startingColumn);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

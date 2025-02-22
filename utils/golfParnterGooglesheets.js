@@ -5,13 +5,16 @@ const auth = new google.auth.GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-export const insertGolfPartnerScrapedData = async (scrapedData) => {
+export const insertGolfPartnerScrapedData = async (
+  scrapedData,
+  row,
+  column
+) => {
   const sheets = google.sheets({ version: "v4", auth });
   const spreadsheetId = process.env.GOOGLE_SHEET_ID;
   try {
-    let row = 4;
     for (const item of scrapedData) {
-      let range = `Japan Research!C${row}`;
+      let range = `Japan Research!${column}${row}`;
       const values = [
         item.brand || "",
         item.model,

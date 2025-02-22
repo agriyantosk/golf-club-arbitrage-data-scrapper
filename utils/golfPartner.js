@@ -13,7 +13,7 @@ export const extractFw = ($) => {
 
     if (options.some((option) => tdText.includes(option))) {
       extractedText = tdText;
-      return false; // Exit loop early if a match is found
+      return false;
     }
   });
 
@@ -76,7 +76,7 @@ export const extractHybrid = ($) => {
 
     if (options.some((option) => tdText.includes(option))) {
       extractedText = tdText;
-      return false; // Exit loop early if a match is found
+      return false;
     }
   });
 
