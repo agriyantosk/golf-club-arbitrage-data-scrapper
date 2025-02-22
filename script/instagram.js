@@ -95,7 +95,6 @@ const instagram = async (username) => {
 
     items.forEach((item) => {
       const formattedDate = formatDate(item.timestamp);
-
       const detectedType = normalizeType(
         item.caption,
         driverKeywords,

@@ -54,7 +54,7 @@ export const extractIronset = ($) => {
   const last = set[set.length - 1];
 
   const formattedOutput = `${first}-${last}`;
-  const validFormats = new Set(["4-S", "5-S", "6-S", "4-P", "5-P", "6-P"]);
+  const validFormats = new Set(["4-P", "5-P"]);
   if (!validFormats.has(formattedOutput.normalize("NFKC"))) {
     return false;
   }
