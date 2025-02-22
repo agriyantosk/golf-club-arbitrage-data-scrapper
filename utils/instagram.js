@@ -69,6 +69,12 @@ export const extractPrice = (caption, priceKeywords) => {
   let foundKeyword = false;
 
   for (const word of words) {
+    if (soldKeywords.some((sold) => word.toLowerCase().includes(sold))) {
+      return 0;
+    }
+  }
+
+  for (const word of words) {
     if (priceKeywords.some((keyword) => word.toLowerCase().includes(keyword))) {
       foundKeyword = true;
     } else if (foundKeyword) {
