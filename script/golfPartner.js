@@ -39,7 +39,6 @@ const scrapeGolfClubDetails = async (url, type) => {
         extractedData = "UNKNOWN";
         break;
     }
-    console.log(extractedData);
     return extractedData;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -47,18 +46,27 @@ const scrapeGolfClubDetails = async (url, type) => {
   }
 };
 
-async function golfPartner(filter, keyword) {
+async function golfPartner(
+  filter,
+  keyword,
+  page,
+  startingRow,
+  startingColumn = "C"
+) {
   try {
+    console.log(startingRow, ">>");
     if (!filters[filter]) throw new Error("Invalid Filter!");
+    if (!startingRow) throw new Error("Please input startingRow!");
     const limit = ["20", "50", "100"];
-    let startingRow = 132;
-    let startingColumn = "C";
+    // let startingRow = 1437;
+    // let startingColumn = "C";
 
     const listUrl = `https://www.golfpartner.jp/shop/usedgoods/${
       filters[filter]
-    }__spnocg/?search=x&keyword=${keyword.replaceAll(" ", "%20")}&limit=${
-      limit[2]
-    }&usedgoods_limit=${limit[2]}`;
+    }__spnocg${page ? "_p" + page : ""}/?search=x&keyword=${keyword.replaceAll(
+      " ",
+      "%20"
+    )}&limit=${limit[2]}&usedgoods_limit=${limit[2]}`;
 
     console.log("Searched URL: ", listUrl);
 
@@ -96,10 +104,26 @@ async function golfPartner(filter, keyword) {
       if (normalizedProductName.includes("・", ""))
         normalizedProductName = normalizedProductName.replaceAll("・", "");
 
+      const cleanName = normalizedProductName.replace(/\s+/g, "");
+
       if (
         !normalizedProductName
           .toLowerCase()
-          .includes(normalizedKeyword.toLowerCase())
+          .includes(normalizedKeyword.toLowerCase()) ||
+        cleanName.includes("レディース") ||
+        cleanName.includes("レフティ") ||
+        cleanName.includes("PLUS") ||
+        cleanName.includes("USA") ||
+        cleanName.includes("CROSSOVER") ||
+        cleanName.includes("GLOIRE") ||
+        cleanName.includes("HL") ||
+        cleanName.includes("LST") ||
+        cleanName.includes("LS") ||
+        cleanName.includes("SFT") ||
+        cleanName.includes("LENGTH") ||
+        // cleanName.includes("FAST") ||
+        // !cleanName.includes("(2021)") ||
+        cleanName.includes("HD")
       ) {
         continue;
       }
@@ -110,6 +134,19 @@ async function golfPartner(filter, keyword) {
         "src"
       )}`;
 
+      // if (
+      //   keyword.split(" ").includes("2023") ||
+      //   keyword.split(" ").includes("2021")
+      // ) {
+      //   if (cleanText(".model_y_ span").includes("年式")) {
+      //     normalizedProductName += ` ${cleanText(".model_y_ span")
+      //       .split("年式")[1]
+      //       .trim()}`;
+      //   } else {
+      //     normalizedProductName += " (Year Unknown)";
+      //   }
+      // }
+
       if (image_url.includes("/sys/usedsorryL.jpg")) continue;
 
       const product_url = `https://www.golfpartner.jp${getAttr(
@@ -118,8 +155,11 @@ async function golfPartner(filter, keyword) {
       )}`;
 
       const clubDetail = await scrapeGolfClubDetails(product_url, filter);
+      if (clubDetail === "UNKNOWN" || clubDetail === false) {
+        continue;
+      }
 
-      results.push({
+      const temp = {
         brand: await translateText(brand),
         model: normalizedProductName,
         type: clubDetail,
@@ -127,10 +167,13 @@ async function golfPartner(filter, keyword) {
         condition: "USED",
         link: product_url,
         imgUrl: image_url,
-      });
+      };
+
+      console.log(temp);
+
+      results.push(temp);
     }
 
-    console.log("results: ", results);
     console.log(`Successsfully scraped ${results.length} data`);
     console.log("Starting to insert scraped datas...");
     await insertGolfPartnerScrapedData(results, startingRow, startingColumn);

@@ -20,14 +20,14 @@ export const extractFw = ($) => {
   let result;
 
   switch (extractedText) {
-    case "3W":
+    case "3W" || "15º":
       result = "FW 3";
       break;
-    case "5W":
+    case "5W" || "18º":
       result = "FW 5";
       break;
     default:
-      result = "UNKNWON";
+      result = "UNKNOWN";
       break;
   }
   return result || "UNKNOWN";
@@ -58,7 +58,7 @@ export const extractIronset = ($) => {
   if (!validFormats.has(formattedOutput.normalize("NFKC"))) {
     return false;
   }
-  return `Ironset (${formattedOutput.normalize("NFKC")})` || "UNKNWON";
+  return `Ironset (${formattedOutput.normalize("NFKC")})` || "UNKNOWN";
 };
 
 export const extractHybrid = ($) => {
@@ -96,7 +96,7 @@ export const extractHybrid = ($) => {
       result = "Hybrid 5";
       break;
     default:
-      result = "UNKNWON";
+      result = "UNKNOWN";
       break;
   }
   return result || "UNKNOWN";
