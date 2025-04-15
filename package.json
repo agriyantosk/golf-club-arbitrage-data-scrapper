@@ -23,8 +23,13 @@
     "axios": "^1.7.9",
     "buffer": "^6.0.3",
     "cheerio": "^1.0.0",
+    "crawlbase": "^1.0.2",
     "dotenv": "^16.4.7",
     "googleapis": "^144.0.0",
-    "iconv-lite": "^0.6.3"
+    "iconv-lite": "^0.6.3",
+    "puppeteer": "^24.4.0",
+    "puppeteer-autoscroll-down": "^2.0.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
